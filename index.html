@@ -1336,12 +1336,6 @@
 
   <script>
 
-    // Restore scroll when intro hides
-    introEl.addEventListener('transitionend', () => {
-      if (introEl.classList.contains('fade-out')) {
-        document.body.style.overflow = '';
-      }
-    });
 
     const menu     = document.getElementById('mobileMenu');
     const hamburger = document.getElementById('hamburger');
