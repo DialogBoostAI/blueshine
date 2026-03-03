@@ -31,11 +31,6 @@
     #uslugi, #galeria, #o-nas, #kontakt {
       scroll-margin-top: 98px;
     }
-    @media (max-width: 767px) {
-      #uslugi, #galeria, #o-nas, #kontakt {
-        scroll-margin-top: 84px;
-      }
-    }
 
     html, body {
       height: 100%;
@@ -1018,10 +1013,10 @@
       </svg>
     </button>
     <div class="mobile-menu__links">
-      <a href="#uslugi" class="mobile-menu__link" onclick="closeMenu()">Usługi</a>
-      <a href="#galeria" class="mobile-menu__link" onclick="closeMenu()">Galeria</a>
-      <a href="#o-nas" class="mobile-menu__link" onclick="closeMenu()">O nas</a>
-      <a href="#kontakt" class="mobile-menu__link" onclick="closeMenu()">Kontakt</a>
+      <a href="#uslugi" class="mobile-menu__link" onclick="mobileNavClick(event,'uslugi')">Usługi</a>
+      <a href="#galeria" class="mobile-menu__link" onclick="mobileNavClick(event,'galeria')">Galeria</a>
+      <a href="#o-nas" class="mobile-menu__link" onclick="mobileNavClick(event,'o-nas')">O nas</a>
+      <a href="#kontakt" class="mobile-menu__link" onclick="mobileNavClick(event,'kontakt')">Kontakt</a>
     </div>
     <div class="mobile-menu__logo-wrap">
       <img src="kontekst_do_strony/uslugi/zdjecia_auta/logo_blueshine-removebg.png" alt="Blueshine logo" class="mobile-menu__logo">
@@ -1339,6 +1334,18 @@
 
     const menu     = document.getElementById('mobileMenu');
     const hamburger = document.getElementById('hamburger');
+
+    function mobileNavClick(e, id) {
+      e.preventDefault();
+      closeMenu();
+      setTimeout(() => {
+        const target = document.getElementById(id);
+        if (!target) return;
+        const navHeight = document.querySelector('.nav').offsetHeight;
+        const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 20;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }, 300);
+    }
 
     function openMenu() {
       menu.classList.add('is-open');
