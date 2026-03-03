@@ -1,0 +1,12 @@
+instagram: https://www.instagram.com/blueshine_autodetailing/
+po kliknieciu w przycisk uzyskaj wycene: https://docs.google.com/forms/d/e/1FAIpQLSeGCHg8X_JAZtYdFpdQvQU35zeyQtzxajclkzAZPnCgt5BiiQ/viewform?fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGndu0Twjya1Q1az0GsjP8ddAHWwq8K3eZeGQzvC-Xf7SJPg2AdE4q7VLgBfR0_aem_7fUp0aDLnazEDEhbYaRBhw
+facebook: https://www.facebook.com/profile.php?id=100054557405182
+nr telefonu: 
+730 059 679
+lokalizacja: Paderewskiego 168, Rzeszów, Poland
+kolory: background - #212129
+glowny tekst: #FFFFFF
+mniejsze napisy: #B0B0B0
+kolory dopelniajace, menu itp: #0F5288 oraz #0CADE1
+Glowny tekst w hero: Tenor sans bold 600
+Dla napisow w nawigacji uzyj lato - 900
