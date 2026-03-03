@@ -992,18 +992,6 @@
       mix-blend-mode: overlay;
     }
 
-    /* Lens flare streaks */
-    #intro::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(112deg, transparent 42%, rgba(12,173,225,0.04) 47%, rgba(0,240,255,0.07) 50%, rgba(12,173,225,0.04) 53%, transparent 58%),
-        linear-gradient(68deg,  transparent 44%, rgba(15,82,136,0.05) 48%, rgba(12,173,225,0.05) 50%, rgba(15,82,136,0.05) 52%, transparent 56%),
-        radial-gradient(ellipse 6% 50% at 50% 58%, rgba(180,240,255,0.06) 0%, transparent 100%);
-      pointer-events: none;
-      mix-blend-mode: screen;
-    }
     #intro.fade-out {
       opacity: 0;
       pointer-events: none;
