@@ -1017,17 +1017,17 @@
 
   <!-- ═══ MOBILE MENU OVERLAY ═════════════════════════ -->
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true" role="dialog" aria-label="Menu">
-    <button class="mobile-menu__close" aria-label="Zamknij menu" onclick="closeMenu()">
+    <button class="mobile-menu__close" id="menuClose" aria-label="Zamknij menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <line x1="18" y1="6" x2="6" y2="18"/>
         <line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
     </button>
     <div class="mobile-menu__links">
-      <a href="#uslugi" class="mobile-menu__link" onclick="closeMenu()">Usługi</a>
-      <a href="#galeria" class="mobile-menu__link" onclick="closeMenu()">Galeria</a>
-      <a href="#o-nas" class="mobile-menu__link" onclick="closeMenu()">O nas</a>
-      <a href="#kontakt" class="mobile-menu__link" onclick="closeMenu()">Kontakt</a>
+      <a href="#uslugi" class="mobile-menu__link">Usługi</a>
+      <a href="#galeria" class="mobile-menu__link">Galeria</a>
+      <a href="#o-nas" class="mobile-menu__link">O nas</a>
+      <a href="#kontakt" class="mobile-menu__link">Kontakt</a>
     </div>
     <div class="mobile-menu__logo-wrap">
       <img src="kontekst_do_strony/uslugi/zdjecia_auta/logo_blueshine-removebg.png" alt="Blueshine logo" class="mobile-menu__logo">
@@ -1083,8 +1083,7 @@
                 id="hamburger"
                 aria-label="Otwórz menu"
                 aria-expanded="false"
-                aria-controls="mobileMenu"
-                onclick="openMenu()">
+                aria-controls="mobileMenu">
           <span class="hamburger__line"></span>
           <span class="hamburger__line"></span>
           <span class="hamburger__line"></span>
@@ -1363,8 +1362,6 @@
       menu.setAttribute('aria-hidden', 'false');
       hamburger.setAttribute('aria-expanded', 'true');
       hamburger.setAttribute('aria-label', 'Zamknij menu');
-      hamburger.setAttribute('onclick', 'closeMenu()');
-      document.body.style.overflow = 'hidden';
     }
 
     function closeMenu() {
@@ -1373,9 +1370,17 @@
       menu.setAttribute('aria-hidden', 'true');
       hamburger.setAttribute('aria-expanded', 'false');
       hamburger.setAttribute('aria-label', 'Otwórz menu');
-      hamburger.setAttribute('onclick', 'openMenu()');
-      document.body.style.overflow = '';
     }
+
+    hamburger.addEventListener('click', () => {
+      menu.classList.contains('is-open') ? closeMenu() : openMenu();
+    });
+
+    document.getElementById('menuClose').addEventListener('click', closeMenu);
+
+    document.querySelectorAll('.mobile-menu__link').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
 
     // Close on Escape key
     document.addEventListener('keydown', function(e) {
