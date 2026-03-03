@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="kontekst_do_strony/samuele-errico-piccarini-FMbWFDiVRPs-unsplash.jpg">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -58,10 +57,16 @@
     .hero__bg {
       position: absolute;
       inset: 0;
+      overflow: hidden;
       background-color: #1a1f2e;
-      background-image: url('kontekst_do_strony/samuele-errico-piccarini-FMbWFDiVRPs-unsplash.jpg');
-      background-size: cover;
-      background-position: 50% 55%;
+    }
+    .hero__bg picture,
+    .hero__bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 55%;
+      display: block;
     }
 
     .hero__overlay {
@@ -429,9 +434,8 @@
       /* Mobile overlay – none */
       .hero__overlay { display: none; }
 
-      .hero__bg {
-        background-image: url('kontekst_do_strony/steven-binotto-9VDuc_sGrSI-unsplash.jpg');
-        background-position: center 40%;
+      .hero__bg img {
+        object-position: center 40%;
       }
 
       /* Hide desktop CTA on mobile */
@@ -1033,7 +1037,12 @@
 
   <!-- ═══ HERO SECTION ════════════════════════════════ -->
   <section class="hero">
-    <div class="hero__bg"></div>
+    <div class="hero__bg">
+      <picture>
+        <source media="(max-width: 767px)" srcset="kontekst_do_strony/steven-binotto-9VDuc_sGrSI-unsplash.jpg">
+        <img src="kontekst_do_strony/samuele-errico-piccarini-FMbWFDiVRPs-unsplash.jpg" fetchpriority="high" decoding="sync" alt="">
+      </picture>
+    </div>
     <div class="hero__overlay"></div>
 
     <!-- Navigation -->
