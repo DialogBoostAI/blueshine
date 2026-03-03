@@ -57,16 +57,9 @@
     .hero__bg {
       position: absolute;
       inset: 0;
-      overflow: hidden;
-      background-color: #1a1f2e;
-    }
-    .hero__bg picture,
-    .hero__bg img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: 50% 55%;
-      display: block;
+      background-image: url('kontekst_do_strony/samuele-errico-piccarini-FMbWFDiVRPs-unsplash.jpg');
+      background-size: cover;
+      background-position: 50% 55%;
     }
 
     .hero__overlay {
@@ -434,8 +427,9 @@
       /* Mobile overlay – none */
       .hero__overlay { display: none; }
 
-      .hero__bg img {
-        object-position: center 40%;
+      .hero__bg {
+        background-image: url('kontekst_do_strony/steven-binotto-9VDuc_sGrSI-unsplash.jpg');
+        background-position: center 40%;
       }
 
       /* Hide desktop CTA on mobile */
@@ -966,6 +960,74 @@
       .contact__inner { gap: 48px; }
     }
 
+    /* ─── INTRO OVERLAY ─────────────────────────────────── */
+    #intro {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      background: #07080d;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      cursor: pointer;
+      pointer-events: all;
+      overflow: hidden;
+      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Metallic grain texture */
+    #intro::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+
+    #intro.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #intro.hidden {
+      display: none;
+    }
+    #intro__logo {
+      width: min(640px, 80vw);
+      opacity: 1;
+      transform: scale(1);
+    }
+    #intro__tap {
+      font-family: 'Lato', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      animation: tap-pulse 2s ease-in-out infinite;
+    }
+    #intro__tap.is-visible { opacity: 1; }
+    #intro__tap.hidden { display: none; }
+    @keyframes tap-pulse {
+      0%, 100% { opacity: 0.35; }
+      50%       { opacity: 0.7; }
+    }
+
+    /* nav + hero content hidden until intro finishes */
+    .nav,
+    .hero__content {
+      opacity: 0;
+      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .nav.intro-done,
+    .hero__content.intro-done {
+      opacity: 1;
+    }
 
     /* ─── SCROLL ANIMATIONS ─────────────────────────────── */
     .reveal {
@@ -1017,32 +1079,33 @@
 
   <!-- ═══ MOBILE MENU OVERLAY ═════════════════════════ -->
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true" role="dialog" aria-label="Menu">
-    <button class="mobile-menu__close" id="menuClose" aria-label="Zamknij menu">
+    <button class="mobile-menu__close" aria-label="Zamknij menu" onclick="closeMenu()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <line x1="18" y1="6" x2="6" y2="18"/>
         <line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
     </button>
     <div class="mobile-menu__links">
-      <a href="#uslugi" class="mobile-menu__link">Usługi</a>
-      <a href="#galeria" class="mobile-menu__link">Galeria</a>
-      <a href="#o-nas" class="mobile-menu__link">O nas</a>
-      <a href="#kontakt" class="mobile-menu__link">Kontakt</a>
+      <a href="#uslugi" class="mobile-menu__link" onclick="closeMenu()">Usługi</a>
+      <a href="#galeria" class="mobile-menu__link" onclick="closeMenu()">Galeria</a>
+      <a href="#o-nas" class="mobile-menu__link" onclick="closeMenu()">O nas</a>
+      <a href="#kontakt" class="mobile-menu__link" onclick="closeMenu()">Kontakt</a>
     </div>
     <div class="mobile-menu__logo-wrap">
       <img src="kontekst_do_strony/uslugi/zdjecia_auta/logo_blueshine-removebg.png" alt="Blueshine logo" class="mobile-menu__logo">
     </div>
   </div>
 
+  <!-- ═══ INTRO OVERLAY ═══════════════════════════════ -->
+  <div id="intro">
+    <img id="intro__logo" src="kontekst_do_strony/uslugi/zdjecia_auta/logo_blueshine-removebg.png" alt="BlueShine">
+    <span id="intro__tap">Kliknij aby wejść</span>
+  </div>
+  <audio id="introAudio" src="kontekst_do_strony/dragon-studio-car-engine-372477.mp3" preload="auto"></audio>
 
   <!-- ═══ HERO SECTION ════════════════════════════════ -->
   <section class="hero">
-    <div class="hero__bg">
-      <picture>
-        <source media="(max-width: 767px)" srcset="kontekst_do_strony/steven-binotto-9VDuc_sGrSI-unsplash.jpg">
-        <img src="kontekst_do_strony/samuele-errico-piccarini-FMbWFDiVRPs-unsplash.jpg" fetchpriority="high" decoding="sync" alt="">
-      </picture>
-    </div>
+    <div class="hero__bg"></div>
     <div class="hero__overlay"></div>
 
     <!-- Navigation -->
@@ -1083,7 +1146,8 @@
                 id="hamburger"
                 aria-label="Otwórz menu"
                 aria-expanded="false"
-                aria-controls="mobileMenu">
+                aria-controls="mobileMenu"
+                onclick="openMenu()">
           <span class="hamburger__line"></span>
           <span class="hamburger__line"></span>
           <span class="hamburger__line"></span>
@@ -1345,6 +1409,52 @@
   </section>
 
   <script>
+    // ── Intro Animation ──────────────────────────────────
+    const introEl     = document.getElementById('intro');
+    const introLogo   = document.getElementById('intro__logo');
+    const introTap    = document.getElementById('intro__tap');
+    const introAudio  = document.getElementById('introAudio');
+    const navEl       = document.querySelector('.nav');
+    const heroContent = document.querySelector('.hero__content');
+    let revealed = false;
+    let started  = false;
+
+    function revealSite() {
+      if (revealed) return;
+      revealed = true;
+      // Always land on hero, remove any hash
+      history.replaceState(null, '', window.location.pathname);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      introEl.classList.add('fade-out');
+      navEl.classList.add('intro-done');
+      heroContent.classList.add('intro-done');
+      introEl.addEventListener('transitionend', () => introEl.classList.add('hidden'), { once: true });
+    }
+
+    function startIntro(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (started) return;
+      started = true;
+      introTap.classList.add('hidden');
+
+      introAudio.play().then(() => {
+        introAudio.addEventListener('ended', revealSite, { once: true });
+        setTimeout(revealSite, 10000);
+      }).catch(() => {
+        setTimeout(revealSite, 1500);
+      });
+    }
+
+    window.addEventListener('load', () => {
+      // Lock scroll while intro is active
+      document.body.style.overflow = 'hidden';
+      window.scrollTo({ top: 0, behavior: 'instant' });
+
+      setTimeout(() => introTap.classList.add('is-visible'), 300);
+
+      introEl.addEventListener('click', startIntro, { once: true });
+    });
 
     // Restore scroll when intro hides
     introEl.addEventListener('transitionend', () => {
@@ -1362,6 +1472,8 @@
       menu.setAttribute('aria-hidden', 'false');
       hamburger.setAttribute('aria-expanded', 'true');
       hamburger.setAttribute('aria-label', 'Zamknij menu');
+      hamburger.setAttribute('onclick', 'closeMenu()');
+      document.body.style.overflow = 'hidden';
     }
 
     function closeMenu() {
@@ -1370,17 +1482,9 @@
       menu.setAttribute('aria-hidden', 'true');
       hamburger.setAttribute('aria-expanded', 'false');
       hamburger.setAttribute('aria-label', 'Otwórz menu');
+      hamburger.setAttribute('onclick', 'openMenu()');
+      document.body.style.overflow = '';
     }
-
-    hamburger.addEventListener('click', () => {
-      menu.classList.contains('is-open') ? closeMenu() : openMenu();
-    });
-
-    document.getElementById('menuClose').addEventListener('click', closeMenu);
-
-    document.querySelectorAll('.mobile-menu__link').forEach(link => {
-      link.addEventListener('click', closeMenu);
-    });
 
     // Close on Escape key
     document.addEventListener('keydown', function(e) {
