@@ -75,11 +75,11 @@
     html { scroll-behavior: smooth; overflow-x: hidden; }
     body { overflow-x: hidden; max-width: 100vw; }
 
-    #uslugi, #galeria, #o-nas, #kontakt {
+    #uslugi, #galeria, #o-nas, #kontakt, #opinie {
       scroll-margin-top: 98px;
     }
     @media (max-width: 767px) {
-      #uslugi, #galeria, #o-nas, #kontakt {
+      #uslugi, #galeria, #o-nas, #kontakt, #opinie {
         scroll-margin-top: 82px;
       }
     }
@@ -1170,6 +1170,7 @@
     <div class="mobile-menu__links">
       <a href="#uslugi" class="mobile-menu__link" onclick="closeMenu()">Usługi</a>
       <a href="#galeria" class="mobile-menu__link" onclick="closeMenu()">Galeria</a>
+      <a href="#opinie" class="mobile-menu__link" onclick="closeMenu()">Opinie</a>
       <a href="#o-nas" class="mobile-menu__link" onclick="closeMenu()">O nas</a>
       <a href="#kontakt" class="mobile-menu__link" onclick="closeMenu()">Kontakt</a>
     </div>
@@ -1194,6 +1195,7 @@
         <div class="nav__left">
           <a href="#uslugi" class="nav__link">Usługi</a>
           <a href="#galeria" class="nav__link">Galeria</a>
+          <a href="#opinie" class="nav__link">Opinie</a>
         </div>
 
         <!-- Desktop: centered logo -->
@@ -1621,7 +1623,7 @@
 
 
   <!-- ═══ OPINIE ═══════════════════════════════════════ -->
-  <section class="reviews">
+  <section class="reviews" id="opinie">
     <div class="reviews__inner">
     <h2 class="reviews__heading">Opinie</h2>
     <div class="reviews__track-wrap">
