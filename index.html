@@ -1117,6 +1117,17 @@
       background: #0CADE1;
       transform: scale(1.25);
     }
+    @media (min-width: 1024px) {
+      .reviews__inner {
+        max-width: 1100px;
+      }
+      .reviews__track {
+        gap: 24px;
+      }
+      .review-card {
+        flex: 0 0 calc((100% - 48px) / 3);
+      }
+    }
 
     /* ─── SCROLL ANIMATIONS (disabled) ─────────────────── */
     .reveal { opacity: 1; transform: none; transition: none; }
@@ -1676,21 +1687,43 @@
       if (!track) return;
       const cards = Array.from(track.children);
       let current = 0;
+      let dots = [];
+
+      function perPage() {
+        return window.innerWidth >= 1024 ? 3 : 1;
+      }
+
+      function totalPages() {
+        return Math.max(1, cards.length - perPage() + 1);
+      }
 
       function goTo(index) {
-        current = (index + cards.length) % cards.length;
-        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        const pages = totalPages();
+        current = Math.max(0, Math.min(index, pages - 1));
+        const cardWidth = cards[0].getBoundingClientRect().width;
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        track.style.transform = 'translateX(-' + (current * (cardWidth + gap)) + 'px)';
         dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
       }
 
-      const dots = cards.map((_, i) => {
-        const d = document.createElement('button');
-        d.className = 'reviews__dot' + (i === 0 ? ' is-active' : '');
-        d.setAttribute('aria-label', 'Opinia ' + (i + 1));
-        d.addEventListener('click', () => goTo(i));
-        dotsWrap.appendChild(d);
-        return d;
-      });
+      function buildDots() {
+        dotsWrap.innerHTML = '';
+        dots = [];
+        for (let i = 0; i < totalPages(); i++) {
+          const d = document.createElement('button');
+          d.className = 'reviews__dot' + (i === 0 ? ' is-active' : '');
+          d.setAttribute('aria-label', 'Opinia ' + (i + 1));
+          d.addEventListener('click', () => goTo(i));
+          dotsWrap.appendChild(d);
+          dots.push(d);
+        }
+      }
+
+      function init() {
+        if (current >= totalPages()) current = 0;
+        buildDots();
+        goTo(current);
+      }
 
       document.getElementById('reviewsPrev').addEventListener('click', () => goTo(current - 1));
       document.getElementById('reviewsNext').addEventListener('click', () => goTo(current + 1));
@@ -1701,6 +1734,9 @@
         const diff = touchStartX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1));
       });
+
+      window.addEventListener('resize', init);
+      init();
     })();
   </script>
 
