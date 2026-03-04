@@ -1012,8 +1012,11 @@
     /* ─── REVIEWS CAROUSEL ──────────────────────────────── */
     .reviews {
       background: #0e0e14;
-      padding: 80px 0 88px;
-      overflow: hidden;
+      padding: 80px 24px 88px;
+    }
+    .reviews__inner {
+      max-width: 640px;
+      margin: 0 auto;
     }
     .reviews__heading {
       font-family: 'Bebas Neue', sans-serif;
@@ -1021,20 +1024,17 @@
       letter-spacing: 0.1em;
       color: #fff;
       text-align: center;
-      margin-bottom: 48px;
+      margin-bottom: 40px;
     }
     .reviews__track-wrap {
       overflow: hidden;
-      padding: 8px 0 24px;
     }
     .reviews__track {
       display: flex;
-      gap: 24px;
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      padding: 0 max(24px, calc((100vw - 1100px) / 2));
     }
     .review-card {
-      flex: 0 0 min(420px, 85vw);
+      flex: 0 0 100%;
       background: #181820;
       border: 1px solid rgba(255,255,255,0.06);
       border-radius: 12px;
@@ -1042,6 +1042,7 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      box-sizing: border-box;
     }
     .review-card__stars {
       display: flex;
@@ -1071,7 +1072,7 @@
       align-items: center;
       justify-content: center;
       gap: 16px;
-      margin-top: 32px;
+      margin-top: 28px;
     }
     .reviews__btn {
       width: 44px;
@@ -1626,54 +1627,12 @@
     if (contactInfo) { contactInfo.classList.add('reveal', 'reveal--left'); revealObserver.observe(contactInfo); }
     if (contactMap)  { contactMap.classList.add('reveal', 'reveal--right');  revealObserver.observe(contactMap); }
 
-    // ── Reviews Carousel ─────────────────────────────────
-    const track  = document.getElementById('reviewsTrack');
-    const cards  = track ? Array.from(track.children) : [];
-    const dotsWrap = document.getElementById('reviewsDots');
-    let current = 0;
-
-    function getCardWidth() {
-      if (!cards.length) return 0;
-      return cards[0].offsetWidth + 24; // card + gap
-    }
-
-    function getOffset() {
-      const pad = parseInt(getComputedStyle(track).paddingLeft) || 24;
-      return pad;
-    }
-
-    function goTo(index) {
-      current = Math.max(0, Math.min(index, cards.length - 1));
-      const offset = getOffset();
-      track.style.transform = `translateX(calc(-${current * getCardWidth()}px))`;
-      dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
-    }
-
-    // Build dots
-    const dots = cards.map((_, i) => {
-      const d = document.createElement('button');
-      d.className = 'reviews__dot' + (i === 0 ? ' is-active' : '');
-      d.setAttribute('aria-label', `Opinia ${i + 1}`);
-      d.addEventListener('click', () => goTo(i));
-      dotsWrap.appendChild(d);
-      return d;
-    });
-
-    document.getElementById('reviewsPrev')?.addEventListener('click', () => goTo(current - 1));
-    document.getElementById('reviewsNext')?.addEventListener('click', () => goTo(current + 1));
-
-    // Touch swipe
-    let touchStartX = 0;
-    track?.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-    track?.addEventListener('touchend', e => {
-      const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1));
-    });
   </script>
 
 
   <!-- ═══ OPINIE ═══════════════════════════════════════ -->
   <section class="reviews">
+    <div class="reviews__inner">
     <h2 class="reviews__heading">Opinie</h2>
     <div class="reviews__track-wrap">
       <div class="reviews__track" id="reviewsTrack">
@@ -1729,7 +1688,42 @@
         <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
       </button>
     </div>
+    </div><!-- /.reviews__inner -->
   </section>
+  <script>
+    (function() {
+      const track    = document.getElementById('reviewsTrack');
+      const dotsWrap = document.getElementById('reviewsDots');
+      if (!track) return;
+      const cards = Array.from(track.children);
+      let current = 0;
+
+      function goTo(index) {
+        current = (index + cards.length) % cards.length;
+        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+      }
+
+      const dots = cards.map((_, i) => {
+        const d = document.createElement('button');
+        d.className = 'reviews__dot' + (i === 0 ? ' is-active' : '');
+        d.setAttribute('aria-label', 'Opinia ' + (i + 1));
+        d.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(d);
+        return d;
+      });
+
+      document.getElementById('reviewsPrev').addEventListener('click', () => goTo(current - 1));
+      document.getElementById('reviewsNext').addEventListener('click', () => goTo(current + 1));
+
+      let touchStartX = 0;
+      track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      track.addEventListener('touchend', e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1));
+      });
+    })();
+  </script>
 
   <!-- ═══ KONTAKT ══════════════════════════════════════ -->
   <section class="contact" id="kontakt">
