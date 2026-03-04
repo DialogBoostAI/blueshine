@@ -1009,6 +1009,114 @@
 
 
 
+    /* ─── REVIEWS CAROUSEL ──────────────────────────────── */
+    .reviews {
+      background: #0e0e14;
+      padding: 80px 0 88px;
+      overflow: hidden;
+    }
+    .reviews__heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 3.5vw, 48px);
+      letter-spacing: 0.1em;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .reviews__track-wrap {
+      overflow: hidden;
+      padding: 8px 0 24px;
+    }
+    .reviews__track {
+      display: flex;
+      gap: 24px;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 0 max(24px, calc((100vw - 1100px) / 2));
+    }
+    .review-card {
+      flex: 0 0 min(420px, 85vw);
+      background: #181820;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 32px 28px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .review-card__stars {
+      display: flex;
+      gap: 3px;
+    }
+    .review-card__star {
+      color: #0CADE1;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .review-card__text {
+      font-family: 'Lato', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #c8c8d0;
+      flex: 1;
+    }
+    .review-card__author {
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #fff;
+    }
+    .reviews__controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .reviews__btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .reviews__btn:hover {
+      background: rgba(12,173,225,0.15);
+      border-color: #0CADE1;
+    }
+    .reviews__btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .reviews__dots {
+      display: flex;
+      gap: 8px;
+    }
+    .reviews__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+      border: none;
+    }
+    .reviews__dot.is-active {
+      background: #0CADE1;
+      transform: scale(1.25);
+    }
+
     /* ─── SCROLL ANIMATIONS ─────────────────────────────── */
     .reveal {
       opacity: 0;
@@ -1517,8 +1625,111 @@
     const contactMap  = document.querySelector('.contact__map-wrap');
     if (contactInfo) { contactInfo.classList.add('reveal', 'reveal--left'); revealObserver.observe(contactInfo); }
     if (contactMap)  { contactMap.classList.add('reveal', 'reveal--right');  revealObserver.observe(contactMap); }
+
+    // ── Reviews Carousel ─────────────────────────────────
+    const track  = document.getElementById('reviewsTrack');
+    const cards  = track ? Array.from(track.children) : [];
+    const dotsWrap = document.getElementById('reviewsDots');
+    let current = 0;
+
+    function getCardWidth() {
+      if (!cards.length) return 0;
+      return cards[0].offsetWidth + 24; // card + gap
+    }
+
+    function getOffset() {
+      const pad = parseInt(getComputedStyle(track).paddingLeft) || 24;
+      return pad;
+    }
+
+    function goTo(index) {
+      current = Math.max(0, Math.min(index, cards.length - 1));
+      const offset = getOffset();
+      track.style.transform = `translateX(calc(-${current * getCardWidth()}px))`;
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+    }
+
+    // Build dots
+    const dots = cards.map((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'reviews__dot' + (i === 0 ? ' is-active' : '');
+      d.setAttribute('aria-label', `Opinia ${i + 1}`);
+      d.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(d);
+      return d;
+    });
+
+    document.getElementById('reviewsPrev')?.addEventListener('click', () => goTo(current - 1));
+    document.getElementById('reviewsNext')?.addEventListener('click', () => goTo(current + 1));
+
+    // Touch swipe
+    let touchStartX = 0;
+    track?.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track?.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1));
+    });
   </script>
 
+
+  <!-- ═══ OPINIE ═══════════════════════════════════════ -->
+  <section class="reviews">
+    <h2 class="reviews__heading">Opinie</h2>
+    <div class="reviews__track-wrap">
+      <div class="reviews__track" id="reviewsTrack">
+
+        <div class="review-card">
+          <div class="review-card__stars">
+            <span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span>
+          </div>
+          <p class="review-card__text">Korekta lakieru. Powłoka polimerowa. Wszystko zrobione na wysokim poziomie nawet dla wymagających. Dodatkowo niewidzialna wycieraczka. Teraz wizyta na myjni to przyjemność, a nie walka. Serdecznie polecam usługa jak i kontakt top.</p>
+          <div class="review-card__author">Kuba</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-card__stars">
+            <span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span>
+          </div>
+          <p class="review-card__text">Jestem bardzo zadowolony z wykonanej usługi. Auto oddałem z milionem drobnych kropek na lakierze i innych elementach po nie poprawnym użyciu Quick Detailera. Lakier został wypolerowany oraz zaaplikowana została powłoka elastomerowa. Wygląda teraz jak milion monet. 🌟✨ POLECAM</p>
+          <div class="review-card__author">Mateusz Kozieł</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-card__stars">
+            <span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span>
+          </div>
+          <p class="review-card__text">Z usług BlueShine korzystam od dłuższego czasu. Mycie i detailing samochodu zawsze dokładne i w umówionym terminie. Co więcej, samochód moich rodziców został zabezpieczony ppfem właśnie tam w bardzo korzystnej cenie. Właściciel szczery i konkretny. Zdecydowanie polecam.</p>
+          <div class="review-card__author">Jakub Tara</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-card__stars">
+            <span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span>
+          </div>
+          <p class="review-card__text">Wykonałem korektę lakieru i zabezpieczenie powłoką z których jestem bardzo zadowolony. Warto wspomnieć o bardzo dobrym kontakcie i obsłudze ze strony właściciela. Polecam!</p>
+          <div class="review-card__author">Dominik Szoda</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-card__stars">
+            <span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span><span class="review-card__star">★</span>
+          </div>
+          <p class="review-card__text">Serdecznie polecam usługi Blueshine. Faktycznie prawdziwe spa dla samochodu. Zdecydowałam się wedle sugestii na dwuetapową korektę lakieru, powłokę elastomerową, niewidzialną wycieraczkę na szybę przednią, czyszczenie i impregnację skór oraz czyszczenie wnętrza. Efekt przerósł oczekiwania. Mój samochód wygląda jak nowy, skóry jak nieużywane a były już trochę zapuszczone. Miła obsługa, wszystko zostało mi wyjaśnione, łącznie z instrukcją postępowania na przyszłość. Bardzo dziękuję obu Panom :)</p>
+          <div class="review-card__author">Karolina Zacharjasz</div>
+        </div>
+
+      </div>
+    </div>
+    <div class="reviews__controls">
+      <button class="reviews__btn" id="reviewsPrev" aria-label="Poprzednia opinia">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="reviews__dots" id="reviewsDots"></div>
+      <button class="reviews__btn" id="reviewsNext" aria-label="Następna opinia">
+        <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+      </button>
+    </div>
+  </section>
 
   <!-- ═══ KONTAKT ══════════════════════════════════════ -->
   <section class="contact" id="kontakt">
